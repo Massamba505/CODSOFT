@@ -3,10 +3,10 @@ const Project = require("../models/project");
 
 const createTask = async (req, res) => {
     try {
-        const { title, description, status, dueDate } = req.body;
+        const { title, description, status, dueDate ,user} = req.body;
         const { projectId } = req.params;
 
-        if (!title || !description || !dueDate) {
+        if (!title || !description || !dueDate || !user) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -22,7 +22,7 @@ const createTask = async (req, res) => {
             status: status || "pending",
             dueDate,
             project: projectId,
-            user: req.user._id,
+            user: user,
         });
 
         await newTask.save();
@@ -40,7 +40,7 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
     try {
         const { projectId } = req.params;
-        const tasks = await Task.find({ project: projectId, user: req.user._id });
+        const tasks = await Task.find({ project: projectId, user: req.user._id }).populate("user");
 
         return res.status(200).json(tasks);
     } catch (error) {
@@ -52,7 +52,7 @@ const getTasks = async (req, res) => {
 const getTaskById = async (req, res) => {
     try {
         const { id, projectId } = req.params;
-        const task = await Task.findOne({ _id: id, project: projectId, user: req.user._id });
+        const task = await Task.findOne({ _id: id, project: projectId, user: req.user._id }).populate("user");
 
         if (!task) {
             return res.status(404).json({ error: "Task not found" });
@@ -67,7 +67,7 @@ const getTaskById = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
-        const { title, description, status, dueDate } = req.body;
+        const { title, description, status, dueDate,user } = req.body;
         const { id, projectId } = req.params;
 
         const task = await Task.findOne({ _id: id, project: projectId, user: req.user._id });
@@ -80,6 +80,7 @@ const updateTask = async (req, res) => {
         task.description = description || task.description;
         task.status = status || task.status;
         task.dueDate = dueDate || task.dueDate;
+        task.user = user || task.user;
 
         await task.save();
 
@@ -100,7 +101,7 @@ const deleteTask = async (req, res) => {
             return res.status(404).json({ error: "Task not found" });
         }
 
-        await task.remove();
+        await Task.findByIdAndDelete(task._id);
 
         return res.status(200).json({ message: "Task deleted successfully" });
     } catch (error) {

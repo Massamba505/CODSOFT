@@ -33,10 +33,14 @@ const login = async(req,res)=>{
 
 const signup = async (req, res) => {
     try {
-        const {fullname, email, password} = req.body;
+        const {fullname, email, password, confirmPassword} = req.body;
 
-        if (!fullname || !email || !password ) {
+        if (!fullname || !email || !password|| !confirmPassword ) {
             return res.status(400).json({ error: "All details are required" });
+        }
+
+        if(confirmPassword != password){
+            return res.status(401).json({ error: "Passwords don't match" });
         }
 
         const existingUserByEmail = await User.findOne({ email });
