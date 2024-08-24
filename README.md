@@ -16,8 +16,7 @@ The following tasks/projects are part of my internship:
    - The Blogging Platform is a full-stack web application designed to allow users to create, publish, and interact with blog posts. The project is divided into several key tasks, which include both frontend and backend development.
 
 **Task 2:** Project Management Tool
-    - Inprogress
-
+   - The Project Management Tool is a web-based application that allows users to create and manage projects. Users can assign tasks, set deadlines, and track progress within their projects. This tool is built using the MERN stack (MongoDB, Express, React, Node.js), focusing on providing a simple and efficient way to manage tasks and projects.
 
 ## Acknowledgments
-  I would like to thank CodSoft for this incredible opportunity to learn and grow as a web developer.
+I would like to thank CodSoft for this incredible opportunity to learn and grow as a web developer.
